@@ -1,4 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-contract StorageFactory {}
+import "./SimpleStorage.sol";
+
+contract StorageFactory {
+    function createStorageFactorty() public {}
+}
