@@ -5,4 +5,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-contract FundMe {}
+contract FundMe {
+    function addFund() public {}
+
+    function withdraw() public {}
+}
