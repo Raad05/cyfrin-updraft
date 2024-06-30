@@ -22,4 +22,12 @@ contract StorageFactory {
         ];
         mySimpleStorage.store(_newSimpleStorageNumber);
     }
+
+    function sfGet(uint256 _simpleStorageIdx) public view returns (uint256) {
+        SimpleStorage mySimpleStorage = listOfSimpleStorageContracts[
+            _simpleStorageIdx
+        ];
+
+        return mySimpleStorage.retrieve();
+    }
 }
