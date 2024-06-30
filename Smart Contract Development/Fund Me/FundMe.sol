@@ -6,7 +6,9 @@
 pragma solidity ^0.8.9;
 
 contract FundMe {
-    function addFund() public {}
+    function fund() public payable {
+        require(msg.value > 1e18, "Not enough ETH sent.");
+    }
 
     function withdraw() public {}
 }
