@@ -9,6 +9,8 @@ import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interf
 
 contract FundMe {
     uint256 public minimumUSD = 5;
+    AggregatorV3Interface public feed =
+        AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
 
     function fund() public payable {
         require(msg.value > 5, "Not enough ETH sent.");
@@ -16,13 +18,15 @@ contract FundMe {
 
     function withdraw() public {}
 
-    function getPrice() public {}
+    function getPrice() public view returns (uint256) {
+        (, int256 answer, , , ) = feed.latestRoundData();
+
+        return uint256(answer * 1e10);
+    }
 
     function getConversionRate() public {}
 
     function getVersion() public view returns (uint256) {
-        return
-            AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306)
-                .version();
+        return feed.version();
     }
 }
