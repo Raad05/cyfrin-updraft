@@ -11,4 +11,6 @@ contract FundMe {
     }
 
     function withdraw() public {}
+
+    function getPrice() public {}
 }
