@@ -1,6 +1,7 @@
 // Add funds from users
 // Withdraw fund to owner
 // Set a minimum fund value in USD
+// Note: Solidity doesn't work well with decimals, so for any general calculations, try to multiply, then divide
 
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
