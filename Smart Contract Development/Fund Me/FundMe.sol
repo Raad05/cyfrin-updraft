@@ -13,4 +13,6 @@ contract FundMe {
     function withdraw() public {}
 
     function getPrice() public {}
+
+    function getConversionRate() public {}
 }
