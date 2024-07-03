@@ -8,12 +8,15 @@ pragma solidity ^0.8.9;
 import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 
 contract FundMe {
-    uint256 public minimumUSD = 5;
+    uint256 public minimumUSD = 5e18;
     AggregatorV3Interface public feed =
         AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
 
     function fund() public payable {
-        require(msg.value > 5, "Not enough ETH sent.");
+        require(
+            getConversionRate(msg.value) > minimumUSD,
+            "Not enough ETH sent."
+        );
     }
 
     function withdraw() public {}
