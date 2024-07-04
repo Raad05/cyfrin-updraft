@@ -17,19 +17,23 @@ contract FundMe {
         public addressToAmountFunded;
 
     function fund() public payable {
+        // check if fund > minimum value
         require(
             msg.value.getConversionRate() > minimumUSD,
             "Not enough ETH sent."
         );
+        // push funder info on-chain
         funders.push(msg.sender);
         addressToAmountFunded[msg.sender] += msg.value;
     }
 
     function withdraw() public {
+        // reset funders amount
         for (uint256 i = 0; i < funders.length; i++) {
             address funder = funders[i];
             addressToAmountFunded[funder] = 0;
         }
+        // reset funders
         funders = new address[](0);
     }
 }
