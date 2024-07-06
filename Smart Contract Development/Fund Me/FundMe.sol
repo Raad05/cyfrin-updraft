@@ -35,5 +35,10 @@ contract FundMe {
         }
         // reset funders
         funders = new address[](0);
+
+        // withdraw fund to owner
+        address owner = payable(msg.sender);
+        (bool sent, ) = owner.call{value: address(this).balance}("");
+        require(sent, "Unable to withdraw money");
     }
 }
