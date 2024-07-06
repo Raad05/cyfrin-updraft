@@ -11,10 +11,14 @@ import {PriceConverter} from "./PriceConverter.sol";
 contract FundMe {
     using PriceConverter for uint256;
     uint256 public minimumUSD = 5e18;
-
     address[] public funders;
     mapping(address funder => uint256 amountFunded)
         public addressToAmountFunded;
+    address public owner;
+
+    constructor() {
+        owner = msg.sender;
+    }
 
     function fund() public payable {
         // check if fund > minimum value
@@ -28,6 +32,9 @@ contract FundMe {
     }
 
     function withdraw() public {
+        // check if function caller is the owner
+        require(msg.sender == owner, "You are not the owner.");
+
         // reset funders amount
         for (uint256 i = 0; i < funders.length; i++) {
             address funder = funders[i];
@@ -37,8 +44,8 @@ contract FundMe {
         funders = new address[](0);
 
         // withdraw fund to owner
-        address owner = payable(msg.sender);
-        (bool sent, ) = owner.call{value: address(this).balance}("");
+        address ownerAddress = payable(msg.sender);
+        (bool sent, ) = ownerAddress.call{value: address(this).balance}("");
         require(sent, "Unable to withdraw money");
     }
 }
