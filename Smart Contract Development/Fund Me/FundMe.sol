@@ -6,7 +6,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
+// imports
 import {PriceConverter} from "./PriceConverter.sol";
+
+// custom errors
+error NotEnoughETHSent();
+error UnableToWithdrawMoney();
+error NotOwner();
 
 contract FundMe {
     // state variables
@@ -29,10 +35,10 @@ contract FundMe {
     // functions
     function fund() public payable {
         // check if fund > minimum value
-        require(
-            msg.value.getConversionRate() > MINIMUM_USD,
-            "Not enough ETH sent."
-        );
+        if (msg.value.getConversionRate() < MINIMUM_USD) {
+            revert NotEnoughETHSent();
+        }
+
         // push funder info on-chain
         funders.push(msg.sender);
         addressToAmountFunded[msg.sender] += msg.value;
@@ -44,18 +50,23 @@ contract FundMe {
             address funder = funders[i];
             addressToAmountFunded[funder] = 0;
         }
+
         // reset funders
         funders = new address[](0);
 
         // withdraw fund to owner
         address ownerAddress = payable(msg.sender);
         (bool sent, ) = ownerAddress.call{value: address(this).balance}("");
-        require(sent, "Unable to withdraw money");
+        if (!sent) {
+            revert UnableToWithdrawMoney();
+        }
     }
 
     // modifiers
     modifier onlyOwner() {
-        require(msg.sender == i_owner, "You are not the owner.");
+        if (msg.sender != i_owner) {
+            revert NotOwner();
+        }
         _;
     }
 }
