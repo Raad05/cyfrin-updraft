@@ -11,22 +11,26 @@ import {PriceConverter} from "./PriceConverter.sol";
 contract FundMe {
     // state variables
     using PriceConverter for uint256;
-    uint256 public minimumUSD = 5e18;
     address[] public funders;
     mapping(address funder => uint256 amountFunded)
         public addressToAmountFunded;
-    address public owner;
+
+    // constant variables
+    uint256 public constant MINIMUM_USD = 5e18;
+
+    // immutable variables
+    address public immutable i_owner;
 
     // constructor
     constructor() {
-        owner = msg.sender;
+        i_owner = msg.sender;
     }
 
     // functions
     function fund() public payable {
         // check if fund > minimum value
         require(
-            msg.value.getConversionRate() > minimumUSD,
+            msg.value.getConversionRate() > MINIMUM_USD,
             "Not enough ETH sent."
         );
         // push funder info on-chain
@@ -51,7 +55,7 @@ contract FundMe {
 
     // modifiers
     modifier onlyOwner() {
-        require(msg.sender == owner, "You are not the owner.");
+        require(msg.sender == i_owner, "You are not the owner.");
         _;
     }
 }
